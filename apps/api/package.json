@@ -1,0 +1,21 @@
+{
+    "name": "api",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js"
+    },
+    "dependencies": {
+        "fastify": "^4.26.1",
+        "@mailerpro/database": "*",
+        "@prisma/client": "^5.10.2"
+    },
+    "devDependencies": {
+        "tsx": "^4.7.1",
+        "typescript": "^5.3.3",
+        "@types/node": "^20.11.24",
+        "@mailerpro/ts-config": "*"
+    }
+}
