@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./apps/web
+    ports:
+      - "8080:80" # Expose le conteneur du Front PWA sur le port 8080 du VPS
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./ # Contexte global car l'API a besoin des /packages partagés
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "3015:3000" # Expose l'API sur le port 3015 du VPS
+    restart: unless-stopped
+    # Facultatif: vous pourrez créer un fichier .env sur votre serveur VPS avec vos secrets
+    env_file:
+      - .env
