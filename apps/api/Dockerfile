@@ -22,6 +22,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Installe OpenSSL pour Prisma car node:20-alpine ne l'a pas par défaut
+RUN apk add --no-cache openssl
+
 # Copie de la structure minimale
 COPY package*.json ./
 COPY turbo.json ./
