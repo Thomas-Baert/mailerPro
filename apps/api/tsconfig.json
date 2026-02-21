@@ -4,6 +4,7 @@
         "outDir": "dist",
         "rootDir": "src",
         "noEmit": false,
+        "allowImportingTsExtensions": false,
         "module": "CommonJS",
         "moduleResolution": "node",
         "esModuleInterop": true
