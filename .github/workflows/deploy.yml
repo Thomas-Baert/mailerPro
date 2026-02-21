@@ -47,10 +47,10 @@ jobs:
             cd /var/www/mailerPro
             
             # Construit les nouvelles images Docker en utilisant le code fraîchement poussé
-            docker compose build
+            docker-compose build
             
             # Relance les conteneurs en tâche de fond (-d) sans interruption (recreates only if changed)
-            docker compose up -d
+            docker-compose up -d
             
             # Nettoie les anciennes images non utilisées pour ne pas saturer l'espace disque du VPS
             docker image prune -f
