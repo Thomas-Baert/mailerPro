@@ -15,7 +15,7 @@ COPY apps/bot ./apps/bot
 RUN npm ci
 
 # Compilation de l'API
-RUN npm run build --filter=api...
+RUN npx turbo run build --filter=api...
 
 # -- Étape 2 : Production --
 FROM node:20-alpine
@@ -30,6 +30,9 @@ COPY apps/api/package.json ./apps/api/
 
 # Installe uniquement les libs de prod
 RUN npm ci --production
+
+# Génère le client Prisma
+RUN npx prisma generate --schema=./packages/database/prisma/schema.prisma
 
 # Récupère le code compilé depuis le builder
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
