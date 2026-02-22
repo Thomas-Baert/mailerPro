@@ -27,6 +27,7 @@ model Specialty {
 
 model Client {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  password String
   surname String
   firstName String
   birthDate DateTime
