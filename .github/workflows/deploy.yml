@@ -35,7 +35,7 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_USER }}
           TARGET: "/var/www/mailerPro"
           # On exclut les node_modules. Docker les installera en interne de façon isolée !
-          EXCLUDE: "/node_modules/, /.git/, /apps/web/node_modules/, /apps/api/node_modules/, /apps/bot/node_modules/"
+          EXCLUDE: "/node_modules/, /.git/, /apps/web/node_modules/, /apps/api/node_modules/, /apps/bot/node_modules/, /.env"
 
       - name: Process Docker Compose
         uses: appleboy/ssh-action@master
