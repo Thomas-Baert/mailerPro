@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  CLIENT
+  ADMIN
+}
+
 model ContractType {
   type String @id
 
@@ -34,6 +39,7 @@ model Client {
   address String
   phoneNumber String
   email String  @unique
+  role Role @default(CLIENT)
 
   applications Application[]
 }
