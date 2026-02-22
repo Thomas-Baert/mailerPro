@@ -4,6 +4,7 @@
     "main": "src/index.ts",
     "types": "src/index.ts",
     "scripts": {
+        "build": "prisma generate",
         "db:push": "prisma db push",
         "db:studio": "prisma studio",
         "generate": "prisma generate"

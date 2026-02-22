@@ -1,6 +1,6 @@
 import * as clientRepo from '../../repositories/client.repository';
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import {Prisma} from "@prisma/client";
+import { Prisma } from "@mailerpro/database";
 
 const clientResponseSchema = {
     type: 'object',

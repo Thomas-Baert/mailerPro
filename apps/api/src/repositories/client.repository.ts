@@ -1,5 +1,5 @@
 import { PrismaClient } from '@mailerpro/database';
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@mailerpro/database";
 const prisma = new PrismaClient();
 
 export const findAllClients = async () => {

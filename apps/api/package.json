@@ -10,7 +10,6 @@
     "dependencies": {
         "@fastify/jwt": "^10.0.0",
         "@mailerpro/database": "*",
-        "@prisma/client": "^5.10.2",
         "bcrypt": "^6.0.0",
         "fastify": "^4.26.1",
         "fastify-plugin": "^5.1.0"
