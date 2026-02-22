@@ -8,14 +8,18 @@
         "start": "node dist/index.js"
     },
     "dependencies": {
-        "fastify": "^4.26.1",
+        "@fastify/jwt": "^10.0.0",
         "@mailerpro/database": "*",
-        "@prisma/client": "^5.10.2"
+        "@prisma/client": "^5.10.2",
+        "bcrypt": "^6.0.0",
+        "fastify": "^4.26.1",
+        "fastify-plugin": "^5.1.0"
     },
     "devDependencies": {
-        "tsx": "^4.7.1",
-        "typescript": "^5.3.3",
+        "@mailerpro/ts-config": "*",
+        "@types/bcrypt": "^6.0.0",
         "@types/node": "^20.11.24",
-        "@mailerpro/ts-config": "*"
+        "tsx": "^4.7.1",
+        "typescript": "^5.3.3"
     }
 }

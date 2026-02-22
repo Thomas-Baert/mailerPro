@@ -8,12 +8,15 @@
         "format": "prettier --write \"**/*.{ts,tsx,md}\""
     },
     "devDependencies": {
-        "turbo": "^1.11.3",
         "prettier": "^3.2.5",
+        "turbo": "^1.11.3",
         "typescript": "^5.3.3"
     },
     "workspaces": [
         "apps/*",
         "packages/*"
-    ]
+    ],
+    "dependencies": {
+        "@fastify/autoload": "^6.3.1"
+    }
 }
