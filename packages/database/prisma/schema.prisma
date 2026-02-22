@@ -3,12 +3,68 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model ContractType {
+  type String @id
+
+  applications Application[]
 }
+
+model Sector {
+  name String @id
+
+  applications Application[]
+}
+
+model Specialty {
+  name String @id
+
+  applications Application[]
+}
+
+model Client {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  surname String
+  firstName String
+  birthDate DateTime
+  address String
+  phoneNumber String
+  email String  @unique
+
+  applications Application[]
+}
+
+model Application {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cv String
+  biography String?
+  clientId String
+  contractType String
+  sectorName String
+  specialtyName String
+
+  client Client @relation(fields: [clientId], references: [id])
+  contract ContractType @relation(fields: [contractType], references: [type])
+  sector Sector @relation(fields: [sectorName], references: [name])
+  specialty Specialty @relation(fields: [specialtyName], references: [name])
+}
+
+model Company {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name String
+
+  CompanyEmails CompanyEmail[]
+}
+
+model CompanyEmail {
+  email String @id
+  category String
+  companyId String
+
+  company Company @relation(fields: [companyId], references: [id])
+}
+
+
