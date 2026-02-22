@@ -8,7 +8,7 @@ async function main() {
     setInterval(async () => {
         console.log('Bot is checking for emails to send...');
         // Logic to check DB and send emails would go here
-        const users = await prisma.user.count();
+        const users = await prisma.client.count();
         console.log(`Found ${users} users in database.`);
     }, 5000); // Check every 5 seconds
 }
