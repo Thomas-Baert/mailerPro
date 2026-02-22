@@ -1,14 +1,16 @@
 import Fastify from 'fastify';
-import { PrismaClient } from '@mailerpro/database';
+import AutoLoad from '@fastify/autoload';
+import { join } from 'path';
 
-const fastify = Fastify({
-    logger: true
+const fastify = Fastify({ logger: true });
+
+fastify.register(AutoLoad, {
+    dir: join(__dirname, 'plugins')
 });
 
-const prisma = new PrismaClient();
-
-fastify.get('/', async (_request, _reply) => {
-    return { hello: 'world', users: await prisma.user.findMany() };
+fastify.register(AutoLoad, {
+    dir: join(__dirname, 'routes'),
+    options: { prefix: '/api' }
 });
 
 const start = async () => {
