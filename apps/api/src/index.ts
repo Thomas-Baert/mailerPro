@@ -4,11 +4,11 @@ import { join } from 'path';
 
 const fastify = Fastify({ logger: true });
 
-fastify.register(AutoLoad, {
+fastify.register(AutoLoad as any, {
     dir: join(__dirname, 'plugins')
 });
 
-fastify.register(AutoLoad, {
+fastify.register(AutoLoad as any, {
     dir: join(__dirname, 'routes'),
     options: { prefix: '/api' }
 });

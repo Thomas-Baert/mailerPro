@@ -3,7 +3,7 @@ import fastifyJwt from '@fastify/jwt';
 import { FastifyInstance } from 'fastify';
 
 async function authPlugin(fastify: FastifyInstance) {
-    fastify.register(fastifyJwt, {
+    await fastify.register(fastifyJwt as any, {
         secret: process.env.JWT_SECRET || 'supersecret_change_me_in_prod!' // fallback used for dev
     });
 
@@ -30,7 +30,7 @@ async function authPlugin(fastify: FastifyInstance) {
         try {
             const user = request.user;
             if (!user || (request.params.id !== user.id && user.role !== 'ADMIN')) {
-                return reply.code(403).send({ error: 'Accès interdit.'});
+                return reply.code(403).send({ error: 'Accès interdit.' });
             }
         } catch (err) {
             reply.send(err);
@@ -38,4 +38,4 @@ async function authPlugin(fastify: FastifyInstance) {
     });
 }
 
-export default fp(authPlugin);
+export default fp(authPlugin as any);

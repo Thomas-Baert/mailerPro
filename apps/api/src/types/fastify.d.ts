@@ -1,19 +1,10 @@
-import '@fastify/jwt';
+import { JWT } from '@fastify/jwt';
 
 declare module 'fastify' {
-    export interface FastifyInstance {
+    interface FastifyInstance {
+        jwt: JWT;
         authenticate: any;
         requireAdmin: any;
         requireBeingMe: any;
-    }
-}
-
-declare module '@fastify/jwt' {
-    interface FastifyJWT {
-        payload: { id: string; role: string };
-        user: {
-            id: string;
-            role: string;
-        };
     }
 }
