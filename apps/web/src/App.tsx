@@ -1,11 +1,11 @@
 import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
+import Login from './pages/Login';
 import './App.css';
 
 function App() {
   return (
     <MainLayout>
-      <Home />
+      <Login />
     </MainLayout>
   );
 }
