@@ -12,16 +12,19 @@ export default function Login() {
     }
 
     return (
-        <form method="post" onSubmit={handleSubmit}>
-            <label>
-                Username
-                <input type="text" placeholder="username" />
-            </label>
-            <label>
-                Password
-                <input type="password" placeholder="Password" />
-            </label>
-            <button>Login</button>
-        </form>
+        <fieldset>
+            <legend>Login</legend>
+            <form method="post" onSubmit={handleSubmit}>
+                <label>
+                    Username
+                    <input type="text" placeholder="username" name="username"/>
+                </label>
+                <label>
+                    Password
+                    <input type="password" placeholder="Password" name="password"/>
+                </label>
+                <button>Login</button>
+            </form>
+        </fieldset>
     );
 }
