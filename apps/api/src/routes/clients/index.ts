@@ -6,6 +6,7 @@ const clientResponseSchema = {
     type: 'object',
     properties: {
         id: { type: 'string' },
+        username: { type: 'string' },
         surname: { type: 'string' },
         firstname: { type: 'string' },
         birthDate: { type: 'string' },
@@ -20,7 +21,7 @@ const clientsResponseSchema = {
     items: clientResponseSchema
 }
 
-const getClientSchema = {
+const getClientByIdSchema = {
     params: {
         type: 'object',
         properties: {
@@ -29,11 +30,21 @@ const getClientSchema = {
     }
 }
 
+const getClientByUsernameSchema = {
+    params: {
+        type: 'object',
+        properties: {
+            username: { type: 'string' }
+        }
+    }
+}
+
 const createClientSchema = {
     body: {
         type: 'object',
-        required: ['email', 'password', 'surname', 'firstName', 'birthDate', 'address', 'phoneNumber'],
+        required: ['username', 'email', 'password', 'surname', 'firstName', 'birthDate', 'address', 'phoneNumber'],
         properties: {
+            username: { type: 'string' },
             password: { type: 'string' },
             surname: { type: 'string' },
             firstname: { type: 'string' },
@@ -45,8 +56,12 @@ const createClientSchema = {
     }
 }
 
-interface ClientParams {
+interface ClientByIdParams {
     id: string;
+}
+
+interface ClientByUsernameParams {
+    username: string;
 }
 
 export default async function clientRoutes(fastify: FastifyInstance) {
@@ -59,11 +74,18 @@ export default async function clientRoutes(fastify: FastifyInstance) {
         return clientRepo.findAllClients();
     });
 
-    fastify.get('/:id', {
-        schema: getClientSchema,
+    fastify.get('/getById/:id', {
+        schema: getClientByIdSchema,
         preValidation: [fastify.authenticate, fastify.requireBeingMe]
-    }, async (request: FastifyRequest<{ Params: ClientParams }>) => {
+    }, async (request: FastifyRequest<{ Params: ClientByIdParams }>) => {
         return clientRepo.findClientById(request.params.id);
+    });
+
+    fastify.get('/getByUsername/:username', {
+        schema: getClientByUsernameSchema,
+        preValidation: [fastify.authenticate, fastify.requireBeingMe]
+    }, async (request: FastifyRequest<{ Params: ClientByUsernameParams }>) => {
+        return clientRepo.findClientByUsername(request.params.username);
     });
 
     fastify.post('/create', {
