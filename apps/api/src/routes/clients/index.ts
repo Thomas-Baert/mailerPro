@@ -23,7 +23,6 @@ const clientsResponseSchema = {
 const getClientSchema = {
     params: {
         type: 'object',
-        id: { type: 'string' },
         properties: {
             id: { type: 'string' }
         }
