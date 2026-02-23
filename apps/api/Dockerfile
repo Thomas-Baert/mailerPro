@@ -1,6 +1,9 @@
 # -- Étape 1 : Build --
 FROM node:20-alpine AS builder
 
+# Installe OpenSSL pour Prisma pendant le build
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copie des fichiers de configuration globaux
