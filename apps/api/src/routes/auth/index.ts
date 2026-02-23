@@ -9,11 +9,13 @@ const loginSchema = {
         properties: {
             email: { type: 'string', format: 'email' },
             id: { type: 'string' },
+            username: { type: 'string' },
             password: { type: 'string' }
         },
         anyOf: [
             { required: ['email'] },
-            { required: ['id'] }
+            { required: ['id'] },
+            { required: ['username'] }
         ]
     }
 }
@@ -36,11 +38,12 @@ async function auth(user: any, password: string, fastify: FastifyInstance, reply
 
 export default async function authRoutes(fastify: FastifyInstance) {
     fastify.post('/login', { schema: loginSchema }, async (request: any, reply: any) => {
-        const { email, id, password } = request.body;
+        const { email, id, username, password } = request.body;
 
         let user: any;
         if (email) user = await clientRepo.findClientByEmail(email);
         else if (id) user = await clientRepo.findClientById(id);
+        else if (username) user = await clientRepo.findClientByUsername(username);
 
         return auth(user, password, fastify, reply);
     });
