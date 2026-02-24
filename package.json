@@ -5,7 +5,9 @@
         "build": "turbo run build",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\""
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "docs": "npm run dev --prefix apps/docs",
+        "docs:build": "npm run build --prefix apps/docs"
     },
     "devDependencies": {
         "prettier": "^3.2.5",

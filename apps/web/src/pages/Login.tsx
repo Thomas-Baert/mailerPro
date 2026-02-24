@@ -2,6 +2,7 @@ import type { FormEvent } from 'react';
 import * as authService from '../services/auth.service.ts';
 import { useMutation } from "@tanstack/react-query";
 import { tokenRegister } from '../utils/tokenRegister';
+import { useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
 
 export default function Login() {
@@ -10,6 +11,8 @@ export default function Login() {
         onSuccess: (response) => {
             tokenRegister(response.data.token);
             console.log('Login successful');
+            const navigate = useNavigate();
+            navigate('/');
         },
         onError: (err) => console.log('Login error:', err)
     });
