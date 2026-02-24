@@ -15,3 +15,5 @@ export const getClientByUsername = (username: string) => {
 export const createClient = (data: any) => {
     return client.post('/clients/create', data);
 }
+
+export const getMe = () => client.get('/auth/me');
