@@ -25,7 +25,7 @@ export default function Register() {
                 <div className={styles.grid}>
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Firstname</label>
-                        <input className={styles.input} type="text" name="firstname" placeholder="John" required />
+                        <input className={styles.input} type="text" name="firstName" placeholder="John" required />
                     </div>
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Surname</label>
