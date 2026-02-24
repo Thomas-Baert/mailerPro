@@ -3,13 +3,26 @@ import * as authService from '../services/auth.service.ts';
 import { useMutation } from "@tanstack/react-query";
 import styles from './Auth.module.css';
 import {tokenRegister} from "../utils/tokenRegister.ts";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Register() {
+    function navigateToLogin() {
+        const navigate = useNavigate();
+        navigate('/login');
+    }
+
+    function navigateToHome() {
+        const navigate = useNavigate();
+        navigate('/');
+    }
+
     const mutation = useMutation<any, any, Record<string, any>>({
         mutationFn: (formData) => authService.register(formData),
         onSuccess: (response) => {
             tokenRegister(response.data.token);
             console.log('Register successful');
+            navigateToHome();
         },
         onError: (err) => console.log('Register error:', err)
     });
@@ -85,8 +98,8 @@ export default function Register() {
                     {mutation.isPending ? "Creating account..." : "Create Account"}
                 </button>
 
-                <p className={styles.footer}>
-                    Already have an account? <a href="#" className={styles.link}>Sign in</a>
+                <p className={styles.footer} onClick={navigateToLogin}>
+                    Already have an account? <span className={styles.link}>Sign in</span>
                 </p>
             </form>
         </div>

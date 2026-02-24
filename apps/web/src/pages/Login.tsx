@@ -6,13 +6,22 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
 
 export default function Login() {
+    function navigateToRegister() {
+        const navigate = useNavigate();
+        navigate('/register');
+    }
+
+    function navigateToHome() {
+        const navigate = useNavigate();
+        navigate('/');
+    }
+
     const mutation = useMutation<any, any, Record<string, any>>({
         mutationFn: (identification) => authService.login(identification),
         onSuccess: (response) => {
             tokenRegister(response.data.token);
             console.log('Login successful');
-            const navigate = useNavigate();
-            navigate('/');
+            navigateToHome();
         },
         onError: (err) => console.log('Login error:', err)
     });
@@ -58,8 +67,8 @@ export default function Login() {
                     {mutation.isPending ? "Signing in..." : "Sign In"}
                 </button>
 
-                <p className={styles.footer}>
-                    Don't have an account? <a href="#" className={styles.link}>Create one</a>
+                <p className={styles.footer} onClick={navigateToRegister}>
+                    Don't have an account? <span className={styles.link}>Create one</span>
                 </p>
             </form>
         </div>
