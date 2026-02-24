@@ -5,7 +5,7 @@ import styles from './Auth.module.css';
 
 export default function Register() {
     const mutation = useMutation<any, any, Record<string, any>>({
-        mutationFn: (formData) => axios.post('/api/auth/register', formData),
+        mutationFn: (formData) => axios.post('mailerpro-api/api/auth/register', formData),
         onSuccess: (data) => console.log('Register successful:', data),
         onError: (err) => console.log('Register error:', err)
     });
