@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react';
 import axios from 'axios';
-import {useMutation} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import styles from './Auth.module.css';
 
 export default function Login() {
     const mutation = useMutation<any, any, Record<string, any>>({
@@ -16,19 +17,44 @@ export default function Login() {
     }
 
     return (
-        <fieldset>
-            <legend>Login</legend>
-            <form method="post" onSubmit={handleSubmit}>
-                <label>
-                    <p>Username</p>
-                    <input type="text" placeholder="username" name="username"/>
-                </label>
-                <label>
-                    Password
-                    <input type="password" placeholder="password" name="password"/>
-                </label>
-                {mutation.isPending ? "Connexion..." : <button>Login</button>}
+        <div className={styles.authContainer}>
+            <h1 className={styles.authTitle}>Welcome Back</h1>
+            <p className={styles.authSubtitle}>Please enter your details to sign in</p>
+
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Username</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        placeholder="Enter your username"
+                        name="username"
+                        required
+                    />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Password</label>
+                    <input
+                        className={styles.input}
+                        type="password"
+                        placeholder="••••••••"
+                        name="password"
+                        required
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    className={styles.submitBtn}
+                    disabled={mutation.isPending}
+                >
+                    {mutation.isPending ? "Signing in..." : "Sign In"}
+                </button>
+
+                <p className={styles.footer}>
+                    Don't have an account? <a href="#" className={styles.link}>Create one</a>
+                </p>
             </form>
-        </fieldset>
+        </div>
     );
 }

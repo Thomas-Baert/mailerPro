@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react';
 import axios from 'axios';
-import {useMutation} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import styles from './Auth.module.css';
 
 export default function Register() {
     const mutation = useMutation<any, any, Record<string, any>>({
@@ -16,28 +17,71 @@ export default function Register() {
     }
 
     return (
-        <fieldset>
-            <legend>Register</legend>
-            <form method="post" onSubmit={handleSubmit}>
-                <label>Username</label>
-                <input type="text" name="username" placeholder="username" required />
-                <label>Email</label>
-                <input type="email" name="email" placeholder="email" required />
-                <label>Firstname</label>
-                <input type="text" name="firstname" placeholder="firstname" required />
-                <label>Surname</label>
-                <input type="text" name="surname" placeholder="surname" required />
-                <label>Birthdate</label>
-                <input type="date" name="birthdate" placeholder="birthdate" required />
-                <label>Address</label>
-                <input type="text" name="address" placeholder="address" required />
-                <label>Phone number</label>
-                <input type="text" name="phoneNumber" placeholder="phone number" required />
-                <label>Password</label>
-                <input type="password" name="password" placeholder="password" required />
-                <label>Confirm Password</label>
-                <input type="password" name="confirmPassword" placeholder="" required />
+        <div className={styles.authContainer} style={{ maxWidth: '600px' }}>
+            <h1 className={styles.authTitle}>Create Account</h1>
+            <p className={styles.authSubtitle}>Join MailerPro to start your campaigns</p>
+
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.grid}>
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Firstname</label>
+                        <input className={styles.input} type="text" name="firstname" placeholder="John" required />
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Surname</label>
+                        <input className={styles.input} type="text" name="surname" placeholder="Doe" required />
+                    </div>
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Username</label>
+                    <input className={styles.input} type="text" name="username" placeholder="johndoe" required />
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Email</label>
+                    <input className={styles.input} type="email" name="email" placeholder="john@example.com" required />
+                </div>
+
+                <div className={styles.grid}>
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Birthdate</label>
+                        <input className={styles.input} type="date" name="birthdate" required />
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Phone number</label>
+                        <input className={styles.input} type="text" name="phoneNumber" placeholder="+33..." required />
+                    </div>
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Address</label>
+                    <input className={styles.input} type="text" name="address" placeholder="123 Main St..." required />
+                </div>
+
+                <div className={styles.grid}>
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Password</label>
+                        <input className={styles.input} type="password" name="password" placeholder="••••••••" required />
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Confirm Password</label>
+                        <input className={styles.input} type="password" name="confirmPassword" placeholder="••••••••" required />
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    className={styles.submitBtn}
+                    disabled={mutation.isPending}
+                >
+                    {mutation.isPending ? "Creating account..." : "Create Account"}
+                </button>
+
+                <p className={styles.footer}>
+                    Already have an account? <a href="#" className={styles.link}>Sign in</a>
+                </p>
             </form>
-        </fieldset>
-    )
+        </div>
+    );
 }
