@@ -79,7 +79,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
 
         try {
             const hashedPassword: string = await bcrypt.hash(password, 10);
-            await clientRepo.createClient({ username, email, password: hashedPassword, surname, firstName, birthDate, address, phoneNumber });
+            await clientRepo.createClient({ email, password: hashedPassword, surname, firstName, birthDate, address, phoneNumber, username });
             const user: any = await clientRepo.findClientByUsername(username);
             const token: string = fastify.jwt.sign({ id: user.id, role: user.role });
 
