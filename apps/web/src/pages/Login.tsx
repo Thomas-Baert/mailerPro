@@ -5,7 +5,7 @@ import styles from './Auth.module.css';
 
 export default function Login() {
     const mutation = useMutation<any, any, Record<string, any>>({
-        mutationFn: (identification) => axios.post('/api/login', identification),
+        mutationFn: (identification) => axios.post('/api/auth/login', identification),
         onSuccess: (data) => console.log('Login successful:', data),
         onError: (err) => console.log('Login error:', err)
     });
