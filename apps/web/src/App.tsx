@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-      <BrowserRouter>
+      <BrowserRouter basename="/mailerpro">
           <MainLayout>
               <Routes>
                   <Route path="/" element={<Home />} />
