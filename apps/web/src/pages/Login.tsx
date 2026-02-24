@@ -1,11 +1,11 @@
 import type { FormEvent } from 'react';
-import client from '../api/client.ts';
+import * as authService from '../services/auth.service.ts';
 import { useMutation } from "@tanstack/react-query";
 import styles from './Auth.module.css';
 
 export default function Login() {
     const mutation = useMutation<any, any, Record<string, any>>({
-        mutationFn: (identification) => client.post('/mailerpro-api/api/auth/login', identification),
+        mutationFn: (identification) => authService.login(identification),
         onSuccess: (data) => console.log('Login successful:', data),
         onError: (err) => console.log('Login error:', err)
     });
