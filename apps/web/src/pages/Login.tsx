@@ -1,12 +1,16 @@
 import type { FormEvent } from 'react';
 import * as authService from '../services/auth.service.ts';
 import { useMutation } from "@tanstack/react-query";
+import { tokenRegister } from '../utils/tokenRegister';
 import styles from './Auth.module.css';
 
 export default function Login() {
     const mutation = useMutation<any, any, Record<string, any>>({
         mutationFn: (identification) => authService.login(identification),
-        onSuccess: (data) => console.log('Login successful:', data),
+        onSuccess: (response) => {
+            tokenRegister(response.data.token);
+            console.log('Login successful');
+        },
         onError: (err) => console.log('Login error:', err)
     });
 
