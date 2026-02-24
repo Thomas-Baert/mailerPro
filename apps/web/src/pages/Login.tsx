@@ -1,14 +1,18 @@
-import * as React from "react";
+import type { FormEvent } from 'react';
+import axios from 'axios';
+import {useMutation} from "@tanstack/react-query";
 
 export default function Login() {
-    function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+    const mutation = useMutation<any, any, Record<string, any>>({
+        mutationFn: (identification) => axios.post('/api/login', identification),
+        onSuccess: (data) => console.log('Login successful:', data),
+        onError: (err) => console.log('Login error:', err)
+    });
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const form = e.target;
-        const data = new FormData(form);
-        const username = data.get("username");
-        const password = data.get("password");
-        console.log("Username:", username);
-        console.log("Password:", password);
+        const data = new FormData(e.currentTarget);
+        mutation.mutate(Object.fromEntries(data));
     }
 
     return (
@@ -16,14 +20,14 @@ export default function Login() {
             <legend>Login</legend>
             <form method="post" onSubmit={handleSubmit}>
                 <label>
-                    Username
+                    <p>Username</p>
                     <input type="text" placeholder="username" name="username"/>
                 </label>
                 <label>
                     Password
-                    <input type="password" placeholder="Password" name="password"/>
+                    <input type="password" placeholder="password" name="password"/>
                 </label>
-                <button>Login</button>
+                {mutation.isPending ? "Connexion..." : <button>Login</button>}
             </form>
         </fieldset>
     );
