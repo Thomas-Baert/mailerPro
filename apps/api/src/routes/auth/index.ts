@@ -21,7 +21,7 @@ const loginSchema = {
 }
 
 const registerSchema = {
-    body:  {
+    body: {
         type: 'object',
         required: ['username', 'email', 'password', 'surname', 'firstName', 'birthDate', 'address', 'phoneNumber'],
         properties: {
@@ -37,7 +37,7 @@ const registerSchema = {
     }
 }
 
-async function auth(user: any, password: string, fastify: FastifyInstance, reply: any): Promise<{token: string}> {
+async function auth(user: any, password: string, fastify: FastifyInstance, reply: any): Promise<{ token: string }> {
     if (!user) {
         return reply.code(401).send({ error: 'Email ou mot de passe incorrect.' });
     }
@@ -87,5 +87,10 @@ export default async function authRoutes(fastify: FastifyInstance) {
         } catch (e) {
             return reply.code(500).send();
         }
+    });
+
+    fastify.get('/me', { preValidation: [fastify.authenticate] }, async (request: any) => {
+        const userId = request.user.id;
+        return clientRepo.findClientById(userId);
     });
 }
