@@ -20,6 +20,23 @@ const loginSchema = {
     }
 }
 
+const registerSchema = {
+    body:  {
+        type: 'object',
+        required: ['username', 'email', 'password', 'surname', 'firstName', 'birthDate', 'address', 'phoneNumber'],
+        properties: {
+            username: { type: 'string' },
+            password: { type: 'string' },
+            surname: { type: 'string' },
+            firstname: { type: 'string' },
+            birthDate: { type: 'string' },
+            address: { type: 'string' },
+            phoneNumbers: { type: 'string' },
+            email: { type: 'string' }
+        }
+    }
+}
+
 async function auth(user: any, password: string, fastify: FastifyInstance, reply: any): Promise<{token: string}> {
     if (!user) {
         return reply.code(401).send({ error: 'Email ou mot de passe incorrect.' });
@@ -46,5 +63,22 @@ export default async function authRoutes(fastify: FastifyInstance) {
         else if (username) user = await clientRepo.findClientByUsername(username);
 
         return auth(user, password, fastify, reply);
+    });
+
+    fastify.post('/register', { schema: registerSchema }, async (request: any, reply: any) => {
+        const {
+            username,
+            email,
+            password,
+            surname,
+            firstName,
+            birthDate,
+            address,
+            phoneNumber
+        } = request.body;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await clientRepo.createClient({ username, email, password: hashedPassword, surname, firstName, birthDate, address, phoneNumber });
+        return reply.code(201).send({ message: 'Utilisateur créé avec succès.' });
     });
 }
