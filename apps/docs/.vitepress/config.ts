@@ -18,6 +18,8 @@ export default withMermaid(
                     text: 'Introduction',
                     items: [
                         { text: 'Architecture Globale', link: '/guide/architecture' },
+                        { text: 'Schéma BDD', link: '/guide/database' },
+                        { text: 'Analyse du Marché', link: '/guide/market-analysis' },
                         { text: 'Installation', link: '/guide/installation' }
                     ]
                 },
