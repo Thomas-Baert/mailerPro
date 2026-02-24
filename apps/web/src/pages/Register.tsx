@@ -1,11 +1,11 @@
 import type { FormEvent } from 'react';
-import axios from 'axios';
+import client from '../api/client';
 import { useMutation } from "@tanstack/react-query";
 import styles from './Auth.module.css';
 
 export default function Register() {
     const mutation = useMutation<any, any, Record<string, any>>({
-        mutationFn: (formData) => axios.post('/mailerpro-api/api/auth/register', formData),
+        mutationFn: (formData) => client.post('/mailerpro-api/api/auth/register', formData),
         onSuccess: (data) => console.log('Register successful:', data),
         onError: (err) => console.log('Register error:', err)
     });
