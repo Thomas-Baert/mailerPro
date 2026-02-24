@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
 
 export default function Login() {
+    const navigate = useNavigate();
+
     function navigateToRegister() {
-        const navigate = useNavigate();
         navigate('/register');
     }
 
     function navigateToHome() {
-        const navigate = useNavigate();
         navigate('/');
     }
 

@@ -2,18 +2,18 @@ import type { FormEvent } from 'react';
 import * as authService from '../services/auth.service.ts';
 import { useMutation } from "@tanstack/react-query";
 import styles from './Auth.module.css';
-import {tokenRegister} from "../utils/tokenRegister.ts";
+import { tokenRegister } from "../utils/tokenRegister.ts";
 import { useNavigate } from 'react-router-dom';
 
 
 export default function Register() {
+    const navigate = useNavigate();
+
     function navigateToLogin() {
-        const navigate = useNavigate();
         navigate('/login');
     }
 
     function navigateToHome() {
-        const navigate = useNavigate();
         navigate('/');
     }
 
