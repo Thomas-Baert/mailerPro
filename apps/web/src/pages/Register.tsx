@@ -46,7 +46,7 @@ export default function Register() {
                 <div className={styles.grid}>
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Birthdate</label>
-                        <input className={styles.input} type="date" name="birthdate" required />
+                        <input className={styles.input} type="date" name="birthDate" required />
                     </div>
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Phone number</label>
