@@ -7,3 +7,5 @@ export const login = (credentials: any) => {
 export const register = (data: any) => {
     return client.post('/auth/register', data);
 }
+
+export const getMe = () => client.get('/auth/me').then(res => res.data);
