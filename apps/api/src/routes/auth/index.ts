@@ -77,8 +77,15 @@ export default async function authRoutes(fastify: FastifyInstance) {
             phoneNumber
         } = request.body;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await clientRepo.createClient({ username, email, password: hashedPassword, surname, firstName, birthDate, address, phoneNumber });
-        return reply.code(201).send({ message: 'Utilisateur créé avec succès.' });
+        try {
+            const hashedPassword: string = await bcrypt.hash(password, 10);
+            await clientRepo.createClient({ username, email, password: hashedPassword, surname, firstName, birthDate, address, phoneNumber });
+            const user: any = await clientRepo.findClientByUsername(username);
+            const token: string = fastify.jwt.sign({ id: user.id, role: user.role });
+
+            return { token };
+        } catch (e) {
+            return reply.code(500).send();
+        }
     });
 }
