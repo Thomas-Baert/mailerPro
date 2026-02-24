@@ -13,7 +13,10 @@ export default function Register() {
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-        mutation.mutate(Object.fromEntries(data));
+        const dateBrute: string = data.get('birthDate') as string;
+        data.set('birthDate', new Date(dateBrute).toISOString());
+        const formData = Object.fromEntries(data);
+        mutation.mutate(formData);
     }
 
     return (
