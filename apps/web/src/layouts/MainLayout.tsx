@@ -1,9 +1,21 @@
 import { useState } from 'react';
 import { Menu, X, Mail, Users, Settings, Home, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { tokenRemove } from "../utils/tokenRegister.ts";
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import styles from './MainLayout.module.css';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    function handleLogout() {
+        tokenRemove();
+        queryClient.clear();
+        navigate('/login');
+    }
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -57,7 +69,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 </nav>
 
                 <div className={styles['sidebar-footer']}>
-                    <button className={`${styles['nav-item']} ${styles.logout}`}>
+                    <button className={`${styles['nav-item']} ${styles.logout}`} onClick={handleLogout}>
                         <LogOut size={20} />
                         <span>Logout</span>
                     </button>
