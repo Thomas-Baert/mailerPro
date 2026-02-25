@@ -8,57 +8,126 @@ datasource db {
 }
 
 enum Role {
-  CLIENT
-  ADMIN
+  STUDENT
+  UNIVERSITY_ADMIN
+  PROFESSOR
+  GLOBAL_ADMIN
 }
 
 model ContractType {
   type String @id
 
-  applications Application[]
+  campaigns Campaign[]
+}
+
+model University {
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  address String?
+  logo    String?
+
+  users    Client[]
+  profiles UniversityProfile[]
+  templates DocumentTemplate[]
+}
+
+model DocumentTemplate {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String
+  type         String
+  universityId String     @db.Uuid
+  authorId     String     @db.Uuid
+
+  university   University    @relation(fields: [universityId], references: [id])
+  author       Client        @relation(fields: [authorId], references: [id])
+  file         PdfFile?
+}
+
+model UniversityProfile {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  universityId String     @db.Uuid
+  university   University @relation(fields: [universityId], references: [id])
+
+  aiModerationPrompt String?
 }
 
 model Sector {
   name String @id
 
-  applications Application[]
+  campaigns Campaign[]
   companies    Company[] @relation("CompanyToSector")
 }
 
 model Specialty {
   name String @id
 
-  applications Application[]
+  campaigns Campaign[]
 }
 
 model Client {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  username String @unique
-  password String
-  surname String
-  firstName String
-  birthDate DateTime
-  address String
-  phoneNumber String
-  email String  @unique
-  role Role @default(CLIENT)
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username     String   @unique
+  password     String
+  surname      String
+  firstName    String
+  birthDate    DateTime?
+  address      String?
+  phoneNumber  String?
+  email        String   @unique
+  role         Role     @default(STUDENT)
+  universityId String?  @db.Uuid
 
+  university   University? @relation(fields: [universityId], references: [id])
+  campaigns    Campaign[]
+  templates    DocumentTemplate[]
+}
+
+model Campaign {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lmPattern     String? // The student's base cover letter
+  biography     String?
+  status        String   @default("DRAFT") // DRAFT, PENDING_VALIDATION, VALIDATED, ACTIVE, ARCHIVED
+  clientId      String   @db.Uuid
+  contractType  String
+  sectorName    String
+  specialtyName String
+
+  client       Client        @relation(fields: [clientId], references: [id])
+  contract     ContractType @relation(fields: [contractType], references: [type])
+  sector       Sector       @relation(fields: [sectorName], references: [name])
+  specialty    Specialty    @relation(fields: [specialtyName], references: [name])
   applications Application[]
+  cvFile       PdfFile? @relation("CampaignCV")
 }
 
 model Application {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cv String
-  biography String?
-  clientId String @db.Uuid
-  contractType String
-  sectorName String
-  specialtyName String
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaignId       String    @db.Uuid
+  companyEmailAddr String
+  status           String    @default("PENDING") // PENDING, SENT, OPENED, SUCCESS
+  sentAt           DateTime?
+  openedAt         DateTime?
 
-  client Client @relation(fields: [clientId], references: [id])
-  contract ContractType @relation(fields: [contractType], references: [type])
-  sector Sector @relation(fields: [sectorName], references: [name])
-  specialty Specialty @relation(fields: [specialtyName], references: [name])
+  campaign     Campaign      @relation(fields: [campaignId], references: [id])
+  companyEmail CompanyEmail @relation(fields: [companyEmailAddr], references: [email])
+  files        PdfFile[]
+}
+
+model PdfFile {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fileData  Bytes
+  fileName  String
+  fileType  String   @default("application/pdf")
+  createdAt DateTime @default(now())
+
+  templateId    String? @unique @db.Uuid
+  template      DocumentTemplate? @relation(fields: [templateId], references: [id])
+  
+  campaignId    String? @unique @db.Uuid
+  campaign      Campaign? @relation("CampaignCV", fields: [campaignId], references: [id])
+  
+  applicationId String? @db.Uuid
+  application   Application? @relation(fields: [applicationId], references: [id])
 }
 
 model Company {
@@ -70,11 +139,10 @@ model Company {
 }
 
 model CompanyEmail {
-  email String @id
-  category String
-  companyId String @db.Uuid
+  email     String   @id
+  category  String
+  companyId String   @db.Uuid
+  company   Company  @relation(fields: [companyId], references: [id])
 
-  company Company @relation(fields: [companyId], references: [id])
+  applications Application[]
 }
-
-
