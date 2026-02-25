@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react';
 import * as authService from '../services/auth.service.ts';
-import { useMutation } from "@tanstack/react-query";
+import * as univService from '../services/universities.service.ts';
+import {useMutation, useQuery} from "@tanstack/react-query";
 import styles from './Auth.module.css';
 import { tokenRegister } from "../utils/tokenRegister.ts";
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,12 @@ export default function Register() {
         navigate('/');
     }
 
-    const mutation = useMutation<any, any, Record<string, any>>({
+    const { data: response, isLoading } = useQuery({
+        queryKey: ['universities'],
+        queryFn: () => univService.getUniversities(),
+    });
+
+    const mutationConnection = useMutation<any, any, Record<string, any>>({
         mutationFn: (formData) => authService.register(formData),
         onSuccess: (response) => {
             tokenRegister(response.data.token);
@@ -33,8 +39,10 @@ export default function Register() {
         const dateBrute: string = data.get('birthDate') as string;
         data.set('birthDate', new Date(dateBrute).toISOString());
         const formData = Object.fromEntries(data);
-        mutation.mutate(formData);
+        mutationConnection.mutate(formData);
     }
+
+    const universities = response?.data || [];
 
     return (
         <div className={styles.authContainer} style={{ maxWidth: '600px' }}>
@@ -90,12 +98,32 @@ export default function Register() {
                     </div>
                 </div>
 
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>University</label>
+                    <select
+                        className={styles.input}
+                        name="universityId" // C'est cette clé qui sera envoyée dans votre FormData
+                        required
+                        disabled={isLoading}
+                    >
+                        <option value="">-- Select your university --</option>
+                        {universities.sort((a: any, b: any) => a.name.localeCompare(b.name))}
+                        {universities.map((uni: any) => (
+                            <option key={uni.id} value={uni.id}>
+                                {uni.name}
+                            </option>
+                        ))}
+                    </select>
+
+                    {isLoading && <p className={styles.loadingText}>Loading universities...</p>}
+                </div>
+
                 <button
                     type="submit"
                     className={styles.submitBtn}
-                    disabled={mutation.isPending}
+                    disabled={mutationConnection.isPending}
                 >
-                    {mutation.isPending ? "Creating account..." : "Create Account"}
+                    {mutationConnection.isPending ? "Creating account..." : "Create Account"}
                 </button>
 
                 <p className={styles.footer} onClick={navigateToLogin}>
