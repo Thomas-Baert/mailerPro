@@ -6,7 +6,7 @@ MailerPro utilise **PostgreSQL** avec l'ORM **Prisma**. Voici la structure relat
 
 ```mermaid
 erDiagram
-    UNIVERSITY ||--o{ CLIENT : "rattache"
+    UNIVERSITY ||--o| CLIENT : "rattache"
     UNIVERSITY ||--o{ UNIVERSITY_PROFILE : "possède"
     UNIVERSITY ||--o{ DOCUMENT_TEMPLATE : "héberge"
     CLIENT ||--o{ CAMPAIGN : "crée"
