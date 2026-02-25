@@ -51,7 +51,9 @@ const createClientSchema = {
             birthDate: { type: 'string' },
             address: { type: 'string' },
             phoneNumbers: { type: 'string' },
-            email: { type: 'string' }
+            email: { type: 'string' },
+            role: { type: 'string' },
+            universityId: { type: 'string' },
         }
     }
 }
