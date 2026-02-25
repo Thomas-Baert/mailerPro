@@ -1,0 +1,61 @@
+/* Custom styles for Mermaid diagrams in VitePress */
+
+.mermaid {
+    display: flex;
+    justify-content: center;
+    background: var(--vp-c-bg-soft);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: zoom-in;
+    overflow: hidden;
+}
+
+/* Enlarge on hover */
+.mermaid:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    overflow: visible;
+}
+
+/* Make SVGs responsive and larger by default */
+.mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+    min-width: 600px;
+    /* Force a decent minimum width for complex diagrams */
+}
+
+@media (max-width: 768px) {
+    .mermaid svg {
+        min-width: 100%;
+    }
+}
+
+/* Fullscreen mode */
+.mermaid.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--vp-c-bg);
+    z-index: 9999;
+    padding: 2rem;
+    margin: 0;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    transform: none !important;
+    overflow: auto;
+}
+
+.mermaid.fullscreen svg {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    min-width: unset;
+}
