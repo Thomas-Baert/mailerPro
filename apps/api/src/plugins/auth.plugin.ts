@@ -18,18 +18,27 @@ async function authPlugin(fastify: FastifyInstance) {
     fastify.decorate('requireAdmin', async function (request: any, reply: any) {
         try {
             const user = request.user;
-            if (!user || user.role !== 'ADMIN') {
-                return reply.code(403).send({ error: 'Accès interdit. Réservé aux administrateurs.' });
+            if (!user || user.role !== 'GLOBAL_ADMIN') {
+                return reply.code(403).send({ error: 'Accès interdit. Réservé aux administrateurs globaux.' });
             }
         } catch (err) {
             reply.send(err);
         }
     });
 
+    fastify.decorate('requireRole', (roles: string[]) => {
+        return async (request: any, reply: any) => {
+            const user = request.user;
+            if (!user || !roles.includes(user.role)) {
+                return reply.code(403).send({ error: `Accès interdit. Rôles requis: ${roles.join(', ')}` });
+            }
+        };
+    });
+
     fastify.decorate('requireBeingMe', async function (request: any, reply: any) {
         try {
             const user = request.user;
-            if (!user || (request.params.id !== user.id && user.role !== 'ADMIN')) {
+            if (!user || (request.params.id !== user.id && user.role !== 'GLOBAL_ADMIN')) {
                 return reply.code(403).send({ error: 'Accès interdit.' });
             }
         } catch (err) {
