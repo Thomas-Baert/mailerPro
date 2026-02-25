@@ -1,116 +1,94 @@
-# Modélisation de la Base de Données
+# Schéma de la Base de Données
 
-Pour bien comprendre la structure des données de MailerPro, nous distinguons le modèle conceptuel (Entité-Association) de l'implémentation physique (Schéma Relationnel).
+MailerPro utilise **PostgreSQL** avec l'ORM **Prisma**. Voici la structure relationnelle des données.
 
-## 1. Diagramme Entité-Association (MCD)
-
-Ce diagramme se concentre sur les concepts métier et les relations logiques, sans s'occuper des contraintes techniques de clé étrangère.
+## Diagramme Entité-Association (EA)
 
 ```mermaid
 erDiagram
-    CLIENT ||--o{ APPLICATION : "soumet"
-    CONTRACT_TYPE ||--o{ APPLICATION : "est requis pour"
-    SECTOR ||--o{ APPLICATION : "concerne"
-    SPECIALTY ||--o{ APPLICATION : "cible"
+    UNIVERSITY ||--o{ CLIENT : "rattache"
+    UNIVERSITY ||--o{ UNIVERSITY_PROFILE : "possède"
+    UNIVERSITY ||--o{ DOCUMENT_TEMPLATE : "héberge"
+    CLIENT ||--o{ CAMPAIGN : "crée"
+    CLIENT ||--o{ DOCUMENT_TEMPLATE : "rédige (Prof)"
+    CONTRACT_TYPE ||--o{ CAMPAIGN : "définit"
+    SECTOR ||--o{ CAMPAIGN : "concerne"
+    SPECIALTY ||--o{ CAMPAIGN : "cible"
+    CAMPAIGN ||--o{ APPLICATION : "génère"
+    CAMPAIGN ||--o? PDF_FILE : "possède CV"
+    APPLICATION ||--o{ PDF_FILE : "contient documents"
+    DOCUMENT_TEMPLATE ||--o? PDF_FILE : "réfère fichier"
+    COMPANY_EMAIL ||--o{ APPLICATION : "reçoit"
     COMPANY ||--o{ COMPANY_EMAIL : "possède"
-    COMPANY }o--o{ SECTOR : "exerce dans"
+    COMPANY ||--o{ SECTOR_TO_COMPANY : "appartient à"
+    SECTOR ||--o{ SECTOR_TO_COMPANY : "contient"
 
-    CLIENT {
-        string username
-        string email
-        string fullName
-        date birthDate
-    }
-
-    APPLICATION {
-        string cv_path
-        text biography
-    }
-
-    COMPANY {
+    UNIVERSITY {
+        uuid id PK
         string name
     }
 
-    COMPANY_EMAIL {
-        string email
-        string category
-    }
-
-    CONTRACT_TYPE {
-        string label
-    }
-```
-
-## 2. Schéma Relationnel (MLD/MPD)
-
-Ce schéma représente l'implémentation réelle dans **PostgreSQL** via Prisma. Il inclut les types de données, les clés primaires (PK) et les clés étrangères (FK).
-
-```mermaid
-erDiagram
-    Client ||--o{ Application : "clientId"
-    ContractType ||--o{ Application : "contractType"
-    Sector ||--o{ Application : "sectorName"
-    Specialty ||--o{ Application : "specialtyName"
-    Company ||--o{ CompanyEmail : "companyId"
-    Company }o--o{ Sector : "CompanyToSector"
-
-    Client {
+    CAMPAIGN {
         uuid id PK
-        varchar username UK
-        varchar password
-        varchar email UK
-        varchar surname
-        varchar firstName
-        timestamp birthDate
-        text address
-        varchar phoneNumber
-        enum role
-    }
-
-    Application {
-        uuid id PK
-        varchar cv
-        text biography
+        string status
         uuid clientId FK
-        varchar contractType FK
-        varchar sectorName FK
-        varchar specialtyName FK
+        string lmPattern
     }
 
-    ContractType {
-        varchar type PK
-    }
-
-    Sector {
-        varchar name PK
-    }
-
-    Specialty {
-        varchar name PK
-    }
-
-    Company {
+    APPLICATION {
         uuid id PK
-        varchar name
+        uuid campaignId FK
+        string companyEmailAddr FK
+        string status
+        datetime sentAt
+        datetime openedAt
     }
 
-    CompanyEmail {
-        varchar email PK
-        varchar category
+    PDF_FILE {
+        uuid id PK
+        bytes fileData
+        string fileName
+        string fileType
+        uuid templateId FK
+        uuid campaignId FK
+        uuid applicationId FK
+    }
+
+    DOCUMENT_TEMPLATE {
+        uuid id PK
+        string title
+        string type
+        uuid universityId FK
+    }
+
+    CLIENT {
+        uuid id PK
+        string username
+        string role
+        uuid universityId FK
+    }
+
+    COMPANY {
+        uuid id PK
+    }
+
+    COMPANY_EMAIL {
+        string email PK
         uuid companyId FK
     }
 ```
 
-## Description des Tables
+## Modèle Conceptuel : Gestion des Fichiers PDF
 
-### Client
+Pour éviter la redondance et permettre une flexibilité totale, nous avons centralisé le stockage des documents :
 
-Stocke les informations de profil et d'authentification des utilisateurs. Le champ `role` permet de distinguer les candidats des administrateurs.
+1.  **`PDF_FILE`** : L'entité unique de stockage binaire.
+2.  **Campagne -> Fichier (1:1)** : Un étudiant a un CV de base pour sa campagne.
+3.  **Application -> Fichiers (1:N)** : Une application peut contenir plusieurs documents générés par l'IA (Lettre personnalisée, CV adapté, etc.).
+4.  **Template -> Fichier (1:1)** : Les professeurs associent leurs modèles PDF à cette entité.
 
-### Application
+### Support Multi-Tenant
+Chaque étudiant et professeur est rattaché à une `University`. Le cloisonnement est assuré par les clés étrangères.
 
-C'est la table centrale du recrutement. Elle contient les documents (CV) et les préférences de poste de l'utilisateur.
-
-### Annuaire Entreprises (Company & CompanyEmail)
-
-Structure permettant de cibler les envois d'e-mails. Une entreprise peut avoir plusieurs adresses e-mail segmentées par catégories (RH, Technique, etc.).
+### Stockage Binaire
+Les documents sont stockés en `BYTEA`. Pour les fichiers volumineux, une migration vers S3 ou un CDN reste possible sans changer la logique métier, simplement en remplaçant `fileData` par une `String` d'URL.

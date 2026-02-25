@@ -1,68 +1,59 @@
 {
-  "hash": "39edaada",
-  "configHash": "ace3e48c",
+  "hash": "f9887062",
+  "configHash": "cf879e53",
   "lockfileHash": "8ee7b6f8",
-  "browserHash": "a65f4da3",
+  "browserHash": "d83d332e",
   "optimized": {
     "vue": {
       "src": "../../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "a73f1e9f",
+      "fileHash": "c770e590",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "5acdfd93",
+      "fileHash": "40f7c9ea",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "1c6633ed",
+      "fileHash": "f9e5a4d4",
       "needsInterop": false
     },
     "@braintree/sanitize-url": {
       "src": "../../../../../node_modules/@braintree/sanitize-url/dist/index.js",
       "file": "@braintree_sanitize-url.js",
-      "fileHash": "5ac8da28",
+      "fileHash": "884c89a1",
       "needsInterop": true
     },
     "dayjs": {
       "src": "../../../../../node_modules/dayjs/dayjs.min.js",
       "file": "dayjs.js",
-      "fileHash": "83e2721d",
+      "fileHash": "378194b0",
       "needsInterop": true
     },
     "debug": {
       "src": "../../../../../node_modules/debug/src/browser.js",
       "file": "debug.js",
-      "fileHash": "f4e98668",
+      "fileHash": "2aff2956",
       "needsInterop": true
     },
     "cytoscape-cose-bilkent": {
       "src": "../../../../../node_modules/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js",
       "file": "cytoscape-cose-bilkent.js",
-      "fileHash": "c0999077",
+      "fileHash": "27be0510",
       "needsInterop": true
     },
     "cytoscape": {
       "src": "../../../../../node_modules/cytoscape/dist/cytoscape.esm.mjs",
       "file": "cytoscape.js",
-      "fileHash": "c6c1a3c2",
-      "needsInterop": false
-    },
-    "@theme/index": {
-      "src": "../../../../../node_modules/vitepress/dist/client/theme-default/index.js",
-      "file": "@theme_index.js",
-      "fileHash": "40050cec",
+      "fileHash": "702d53a8",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-TBFXGU3P": {
-      "file": "chunk-TBFXGU3P.js"
-    },
     "chunk-YVDK3O6H": {
       "file": "chunk-YVDK3O6H.js"
     },
