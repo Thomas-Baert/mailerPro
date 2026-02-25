@@ -48,7 +48,7 @@ model UniversityProfile {
   universityId String     @db.Uuid
   university   University @relation(fields: [universityId], references: [id])
 
-  aiModerationPrompt String?
+  aiModerationPrompt String
 }
 
 model Sector {
