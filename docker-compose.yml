@@ -4,6 +4,8 @@ services:
   web:
     build:
       context: ./apps/web
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8080:80" # Expose le conteneur du Front PWA sur le port 8080 du VPS
     restart: unless-stopped
